@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace Pri.Ee.Core.Dtos
+namespace Pri.Ee.Api.Dtos.Workout
 {
-    public class WorkoutDto
+    public class WorkoutResponseDto
     {
+        public Guid Id { get; set; }
         public Guid UserId { get; set; }
 
         [Required]
