@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Pri.Ee.Core.Data;
 using Pri.Ee.Core.Entities;
+using Pri.Ee.Core.Services;
+using Pri.Ee.Core.Services.Interfaces;
 using System.Text;
 
 public class Program
@@ -18,7 +20,8 @@ public class Program
 
         builder.Services.AddControllers();
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDatabase")));
-        builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+        //builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
+        builder.Services.AddScoped<IWorkoutService, WorkoutService>();
         // Identity configuration
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {

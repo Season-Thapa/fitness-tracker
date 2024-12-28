@@ -69,13 +69,11 @@ namespace Pri.Ee.Core.Services
 
         public async Task<ResultModel<Workout>> UpdateWorkoutAsync(Workout workout)
         {
-            var selectedWorkout = await _context.Workouts.FirstOrDefaultAsync(w =>  w.Id == workout.Id);
-            if (selectedWorkout == null)
+            if (!await DoesWorkoutIdExistAsync(workout.Id))
             {
-                new ResultModel<Workout>
+                return new ResultModel<Workout>
                 {
-                    Errors = new List<string>
-                      { $"There is no workout with name = {workout.Type}" }
+                    Errors = new List<string> { $"There is no workout with id {workout.Id}!" }
                 };
             }
             _context.Workouts.Update(workout);
@@ -94,6 +92,10 @@ namespace Pri.Ee.Core.Services
             return new ResultModel<Workout> { Data = workout };
 
         }
-   
+
+        public async Task<bool> DoesWorkoutIdExistAsync(Guid id)
+        {
+            return await _context.Workouts.AnyAsync(w => w.Id.Equals(id));
+        }
     }
 }

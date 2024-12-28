@@ -71,7 +71,7 @@ namespace Pri.Ee.Api.Controllers
             {
                 var dto = new WorkoutResponseDto
                 {
-                    Id = workout.Id,
+                    Id = new Guid(),
                     Type = workout.Type,
                     Date = workout.Date,
                     Duration = workout.Duration,
@@ -81,6 +81,44 @@ namespace Pri.Ee.Api.Controllers
 
             }
             return BadRequest(resultWorkout.Errors);
+        }
+        [HttpPut]
+        public async Task<IActionResult> Update(WorkoutRequestDto workoutRequestDto)
+        {
+            if(await _workoutService.DoesWorkoutIdExistAsync(workoutRequestDto.Id) == false)
+            {
+                return BadRequest($"No workout with id '{workoutRequestDto.Id}' found");
+            }
+            var selectedWorkout = await _workoutService.GetWorkoutByIdAsync(workoutRequestDto.Id);
+            if (selectedWorkout.Success == false)
+            {
+                return BadRequest(selectedWorkout.Errors);
+            }
+            var existingEntity = selectedWorkout.Data;
+            existingEntity.Type = workoutRequestDto.Type;
+            var result = await _workoutService.UpdateWorkoutAsync(existingEntity);
+            if (result.Success)
+            {
+                return Ok($"Workout {existingEntity.Id} updated");
+            }
+            return BadRequest(result.Errors);
+
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(Guid id)
+        {
+            if (await _workoutService.DoesWorkoutIdExistAsync(id) == false)
+            {
+                return NotFound($"No workout with id '{id}' found");
+            }
+            var selectedWorkout = await _workoutService.GetWorkoutByIdAsync(id);
+            if (selectedWorkout.Success == false)
+            {
+                return BadRequest(selectedWorkout.Errors);
+            }
+            var result = await _workoutService.DeleteWorkoutAsync(selectedWorkout.Data);
+            return Ok($"Workout {selectedWorkout.Data.Id} deleted");
         }
     }
 }

@@ -17,6 +17,8 @@ namespace Pri.Ee.Core.Services.Interfaces
         Task<ResultModel<Workout>> AddWorkoutAsync(Workout workout);
         Task<ResultModel<Workout>> UpdateWorkoutAsync(Workout workout);
         Task<ResultModel<Workout>> DeleteWorkoutAsync(Workout workout);
+        Task<bool> DoesWorkoutIdExistAsync(Guid id);
+
 
     }
 }
