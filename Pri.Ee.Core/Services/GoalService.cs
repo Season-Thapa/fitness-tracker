@@ -1,4 +1,6 @@
-﻿using Pri.Ee.Core.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using Pri.Ee.Core.Data;
+using Pri.Ee.Core.Entities;
 using Pri.Ee.Core.Services.Interfaces;
 using Pri.Ee.Core.Services.Models;
 using System;
@@ -11,39 +13,110 @@ namespace Pri.Ee.Core.Services
 {
     public class GoalService : IGoalService
     {
-        public Task<ResultModel<Goal>> AddGoalAsync(Goal goal)
+        private readonly ApplicationDbContext _context;
+
+        public GoalService(ApplicationDbContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
         }
 
-        public Task<ResultModel<Goal>> DeleteGoalAsync(Goal goal)
+        public async Task<ResultModel<Goal>> AddGoalAsync(Goal goal)
         {
-            throw new NotImplementedException();
+            _context.Goals.Add(goal);
+            await _context.SaveChangesAsync();
+            return new ResultModel<Goal>
+            {
+                Data = goal
+            };
         }
 
-        public Task<bool> DoesGoalIdExistAsync(Guid id)
+        public async Task<int> CalculateProgressAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var goal = await _context.Goals.FindAsync(id);
+            if (goal == null)
+            {
+                throw new KeyNotFoundException("Goal not found");
+            }
+            var totalProgress = await _context.Workouts
+            .Where(w => w.UserId == goal.UserId &&
+                        w.Date >= goal.StartDate &&
+                        w.Date <= goal.EndDate)
+            .SumAsync(w => w.CaloriesBurned);
+
+            return totalProgress;
         }
 
-        public Task<ResultModel<IEnumerable<Goal>>> GetAllGoalsAsync()
+        public async Task<ResultModel<Goal>> DeleteGoalAsync(Goal goal)
         {
-            throw new NotImplementedException();
+            _context.Goals.Remove(goal);
+            await _context.SaveChangesAsync();
+            return new ResultModel<Goal>
+            {
+                Data = goal
+            };
+
         }
 
-        public Task<ResultModel<Goal>> GetGoalByIdAsync(Guid id)
+        public async Task<bool> DoesGoalIdExistAsync(Guid id)
         {
-            throw new NotImplementedException();
+            return await _context.Goals.AnyAsync(g => g.Id == id);
         }
 
-        public Task<ResultModel<IEnumerable<Goal>>> GetGoalsByUserIdAsync(Guid userId)
+        public async Task<ResultModel<IEnumerable<Goal>>> GetAllGoalsAsync()
         {
-            throw new NotImplementedException();
+            var result = await _context.Goals.ToListAsync();
+            var resultModel = new ResultModel<IEnumerable<Goal>>()
+            {
+                Data = result,
+            };
+            return resultModel;
         }
 
-        public Task<ResultModel<Goal>> UpdateGoalAsync(Goal goal)
+        public async Task<ResultModel<Goal>> GetGoalByIdAsync(Guid id)
         {
-            throw new NotImplementedException();
+            var selectedGoal = await _context.Goals.FirstOrDefaultAsync(g => g.Id == id);
+            if (selectedGoal != null)
+            {
+                new ResultModel<Goal>
+                {
+                    Errors = new List<string>
+                    {
+                        "There is no goal"
+                    }
+                };
+            }
+            return new ResultModel<Goal>
+            {
+                Data = selectedGoal
+            };
+        }
+
+        public async Task<ResultModel<IEnumerable<Goal>>> GetGoalsByUserIdAsync(Guid userId)
+        {
+            var goal = await _context.Goals
+            .Include(x => x.UserId)
+            .Where(w => w.UserId.Equals(userId)).ToListAsync();
+            return new ResultModel<IEnumerable<Goal>> { Data = goal };
+        }
+
+        public async Task<ResultModel<Goal>> UpdateGoalAsync(Goal goal)
+        {
+            if (await DoesGoalIdExistAsync(goal.Id))
+            {
+                return new ResultModel<Goal>
+                {
+                    Errors = new List<string>
+                    {
+                        "There are no goal to update"
+                    }
+                };
+            }
+            _context.Goals.Update(goal);
+            await _context.SaveChangesAsync();
+            return new ResultModel<Goal>
+            {
+                Data = goal
+            };
         }
     }
 }
