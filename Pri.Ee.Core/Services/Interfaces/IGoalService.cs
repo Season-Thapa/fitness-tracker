@@ -18,5 +18,6 @@ namespace Pri.Ee.Core.Services.Interfaces
         Task<ResultModel<Goal>> DeleteGoalAsync(Goal goal);
         Task<bool> DoesGoalIdExistAsync(Guid id);
         Task<int> CalculateProgressAsync(Guid id);
+        Task<ResultModel<Goal>> UpdateGoalProgressAsync(Guid id);
     }
 }

@@ -46,6 +46,7 @@ namespace Pri.Ee.Core.Services
             return totalProgress;
         }
 
+
         public async Task<ResultModel<Goal>> DeleteGoalAsync(Goal goal)
         {
             _context.Goals.Remove(goal);
@@ -111,6 +112,22 @@ namespace Pri.Ee.Core.Services
                     }
                 };
             }
+            _context.Goals.Update(goal);
+            await _context.SaveChangesAsync();
+            return new ResultModel<Goal>
+            {
+                Data = goal
+            };
+        }
+
+        public async Task<ResultModel<Goal>> UpdateGoalProgressAsync(Guid id)
+        {
+            var goal = await _context.Goals.FindAsync(id);
+            if (goal == null) throw new KeyNotFoundException("Goal not found");
+
+            var progress = await CalculateProgressAsync(id);
+            goal.Progress = progress;
+
             _context.Goals.Update(goal);
             await _context.SaveChangesAsync();
             return new ResultModel<Goal>

@@ -108,6 +108,16 @@ namespace Pri.Ee.Api.Controllers
             return Ok($"Goal {existingGoalResult.Data.Id} deleted");
 
         }
+        [HttpPost("{id}/update-progress")]
+        public async Task<IActionResult> UpdateGoalProgress(Guid id)
+        {
+            var result = await _goalService.UpdateGoalProgressAsync(id);
+            if (result.Success == false)
+            {
+                return BadRequest("Unable to update goal progress");
+            }
 
+            return Ok("Goal progress updated successfully");
+        }
     }
 }
