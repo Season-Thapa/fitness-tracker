@@ -1,0 +1,27 @@
+﻿@model WorkoutRequestDto
+
+<h2>Edit Workout</h2>
+<form method="post">
+    <input type="hidden" asp-for="Id" />
+    <div>
+        <label>Type:</label>
+        <input asp-for="Type" />
+        <span asp-validation-for="Type"></span>
+    </div>
+    <div>
+        <label>Duration (minutes):</label>
+        <input asp-for="Duration" type="number" />
+        <span asp-validation-for="Duration"></span>
+    </div>
+    <div>
+        <label>Calories Burned:</label>
+        <input asp-for="CaloriesBurned" type="number" />
+        <span asp-validation-for="CaloriesBurned"></span>
+    </div>
+    <div>
+        <label>Date:</label>
+        <input asp-for="Date" type="datetime-local" />
+        <span asp-validation-for="Date"></span>
+    </div>
+    <button type="submit">Save Changes</button>
+</form>
