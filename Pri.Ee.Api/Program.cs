@@ -22,6 +22,7 @@ public class Program
         builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultDatabase")));
         //builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
         builder.Services.AddScoped<IWorkoutService, WorkoutService>();
+        builder.Services.AddScoped<IGoalService, GoalService>();
         // Identity configuration
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
