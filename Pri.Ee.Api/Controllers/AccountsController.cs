@@ -67,8 +67,6 @@ namespace Pri.Ee.Api.Controllers
 
             return Ok();
         }
-
-        //Private methods
         private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
         {
             var claims = new List<Claim>();

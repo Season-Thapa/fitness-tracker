@@ -47,5 +47,34 @@ namespace Pri.Ee.Web.Controllers
 
             return RedirectToAction("Index", "Home");
         }
+        [HttpGet]
+        public IActionResult Register()
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Register(RegisterUserRequestDto registerUserRequestDto)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(registerUserRequestDto);
+            }
+
+            var response = await _httpClient.PostAsJsonAsync("api/Accounts/register", registerUserRequestDto);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorMessage = await response.Content.ReadAsStringAsync();
+                Console.WriteLine("Error Response: " + errorMessage);
+
+                ModelState.AddModelError(string.Empty, "Registration failed. Please try again.");
+                return View(registerUserRequestDto);
+            }
+
+            // Registration successful, redirect to login page
+            TempData["SuccessMessage"] = "Registration successful! Please log in.";
+            return RedirectToAction("Login");
+        }
+
     }
 }
