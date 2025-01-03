@@ -11,7 +11,6 @@ namespace Pri.Ee.Api.Controllers
     public class WorkoutController : ControllerBase
     {
         private readonly IWorkoutService _workoutService;
-
         public WorkoutController(IWorkoutService workoutService)
         {
             _workoutService = workoutService;

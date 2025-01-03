@@ -26,6 +26,7 @@ namespace Pri.Ee.Api.Controllers
                 {
                     Id = g.Id,
                     Target = g.Target,
+                    Progress = g.Progress
 
                 });
                 return Ok(goalDtos);
@@ -42,6 +43,7 @@ namespace Pri.Ee.Api.Controllers
                 {
                     Id = result.Data.Id,
                     Target = result.Data.Target,
+                    Progress = result.Data.Progress
 
                 };
                 return Ok(goalDto);
@@ -53,7 +55,6 @@ namespace Pri.Ee.Api.Controllers
         {
             var goal = new Goal
             {
-                Id = goalDto.Id,
                 Target = goalDto.Target,
 
             };
@@ -62,10 +63,10 @@ namespace Pri.Ee.Api.Controllers
             {
                 var dto = new GoalResponseDto
                 {
-                    Id = goal.Id,
+                    Id = new Guid(),
                     Target = goal.Target,
                 };
-                return CreatedAtAction(nameof(Get), new { id = dto.Id, }, dto); 
+                return CreatedAtAction(nameof(Get), new { id = dto.Id}, dto); 
 
             }
             return BadRequest(resultGoal.Errors);
@@ -109,15 +110,35 @@ namespace Pri.Ee.Api.Controllers
 
         }
         [HttpPost("{id}/update-progress")]
-        public async Task<IActionResult> UpdateGoalProgress(Guid id)
+        public async Task<IActionResult> UpdateGoalProgress(Guid id, [FromBody] int progress)
         {
-            var result = await _goalService.UpdateGoalProgressAsync(id);
-            if (result.Success == false)
+            var goalResult = await _goalService.GetGoalByIdAsync(id);
+            if (goalResult.Success == false || goalResult.Data == null)
             {
-                return BadRequest("Unable to update goal progress");
+                return NotFound("Goal not found.");
             }
 
-            return Ok("Goal progress updated successfully");
+            var goal = goalResult.Data;
+
+            goal.Progress += progress;
+
+            if (goal.Progress > goal.Target)
+            {
+                goal.Progress = goal.Target;
+            }
+
+            var updateResult = await _goalService.UpdateGoalAsync(goal);
+            if (updateResult.Success)
+            {
+                return Ok(new
+                {
+                    Message = "Goal progress updated successfully",
+                    GoalId = goal.Id,
+                    UpdatedProgress = goal.Progress,                    
+                });
+            }
+
+            return BadRequest("Failed to update goal progress.");
         }
     }
 }

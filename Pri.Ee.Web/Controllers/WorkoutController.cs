@@ -10,7 +10,7 @@ namespace Pri.Ee.Web.Controllers
 
         public WorkoutController(IHttpClientFactory httpClientFactory)
         {
-            _httpClient = httpClientFactory.CreateClient("DefaultClient"); ;
+            _httpClient = httpClientFactory.CreateClient("DefaultClient"); 
         }
         [HttpGet]
         public async Task<IActionResult> Index()

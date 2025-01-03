@@ -76,7 +76,7 @@ namespace Pri.Ee.Core.Services
         public async Task<ResultModel<Goal>> GetGoalByIdAsync(Guid id)
         {
             var selectedGoal = await _context.Goals.FirstOrDefaultAsync(g => g.Id == id);
-            if (selectedGoal != null)
+            if (selectedGoal == null)
             {
                 new ResultModel<Goal>
                 {
@@ -102,7 +102,7 @@ namespace Pri.Ee.Core.Services
 
         public async Task<ResultModel<Goal>> UpdateGoalAsync(Goal goal)
         {
-            if (await DoesGoalIdExistAsync(goal.Id))
+            if (!await DoesGoalIdExistAsync(goal.Id))
             {
                 return new ResultModel<Goal>
                 {
