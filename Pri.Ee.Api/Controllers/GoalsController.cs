@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pri.Ee.Api.Dtos.Goal;
 using Pri.Ee.Core.Dtos;
 using Pri.Ee.Core.Entities;
 using Pri.Ee.Core.Services.Interfaces;
+using System.Security.Claims;
 
 namespace Pri.Ee.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class GoalsController : Controller
     {
         private readonly IGoalService _goalService;
@@ -17,6 +20,7 @@ namespace Pri.Ee.Api.Controllers
             _goalService = goalService;
         }
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get()
         {
             var result = await _goalService.GetAllGoalsAsync();
@@ -26,7 +30,7 @@ namespace Pri.Ee.Api.Controllers
                 {
                     Id = g.Id,
                     Target = g.Target,
-                    Progress = g.Progress
+                    Progress = g.Progress,
 
                 });
                 return Ok(goalDtos);
@@ -34,6 +38,7 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(result.Errors);
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Get(Guid id)
         {
             var result = await _goalService.GetGoalByIdAsync(id);
@@ -51,11 +56,20 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(result.Errors);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Add(GoalRequestDto goalDto)
         {
+            var userIdClaim = User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("User ID not found in claims.");
+            }
+
+            var userId = userIdClaim;
             var goal = new Goal
             {
                 Target = goalDto.Target,
+                UserId = userId
 
             };
             var resultGoal = await _goalService.AddGoalAsync(goal);
@@ -64,7 +78,7 @@ namespace Pri.Ee.Api.Controllers
                 var dto = new GoalResponseDto
                 {
                     Id = new Guid(),
-                    Target = goal.Target,
+                    Target = goal.Target,                  
                 };
                 return CreatedAtAction(nameof(Get), new { id = dto.Id}, dto); 
 
@@ -72,6 +86,7 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(resultGoal.Errors);
         }
         [HttpPut]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Update(GoalRequestDto goalDto)
         {
             if (await _goalService.DoesGoalIdExistAsync(goalDto.Id) == false)
@@ -94,6 +109,7 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(result.Errors);
         }
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (await _goalService.DoesGoalIdExistAsync(id) == false)
@@ -110,6 +126,7 @@ namespace Pri.Ee.Api.Controllers
 
         }
         [HttpPost("{id}/update-progress")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> UpdateGoalProgress(Guid id, [FromBody] int progress)
         {
             var goalResult = await _goalService.GetGoalByIdAsync(id);
@@ -140,5 +157,40 @@ namespace Pri.Ee.Api.Controllers
 
             return BadRequest("Failed to update goal progress.");
         }
+        //public string GetLoggedInUserId()
+        //{
+        //    LoggedUserId = User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
+        //    return LoggedUserId;
+        //}
+        [HttpGet("user-goals")]
+        public async Task<IActionResult> GetGoalsByUserId()
+        {
+            // Retrieve the logged-in user's ID from claims
+            var userIdClaim = User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("User ID not found in claims.");
+            }
+
+            var userId = userIdClaim;
+
+            // Fetch goals by user ID
+            var userGoals = await _goalService.GetGoalsByUserIdAsync(userId);
+            if (userGoals == null || !userGoals.Success)
+            {
+                return NotFound("No goals found for the user.");
+            }
+
+            // Map data to DTOs and return the response
+            var goalDtos = userGoals.Data.Select(g => new GoalResponseDto
+            {
+                Id = g.Id,
+                Target = g.Target,
+                Progress = g.Progress
+            });
+
+            return Ok(goalDtos);
+        }
+
     }
 }

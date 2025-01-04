@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pri.Ee.Web.Dtos.Workout;
 using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace Pri.Ee.Web.Controllers
 {
@@ -15,6 +16,7 @@ namespace Pri.Ee.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
+            await SetBearerToken();
             var response = await _httpClient.GetAsync("api/Workout");
             if (!response.IsSuccessStatusCode)
             {
@@ -80,6 +82,7 @@ namespace Pri.Ee.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
+            await SetBearerToken();
             var response = await _httpClient.DeleteAsync($"api/Workout/{id}");
             if (!response.IsSuccessStatusCode)
             {
@@ -87,6 +90,17 @@ namespace Pri.Ee.Web.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+        private async Task SetBearerToken()
+        {
+            var token = HttpContext.Session.GetString(Constants.TokenKey);
+            if (string.IsNullOrEmpty(token))
+            {
+                ModelState.AddModelError(string.Empty, "User is not authenticated.");
+
+            }
+
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
         }
     }
 }

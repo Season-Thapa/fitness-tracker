@@ -6,6 +6,7 @@ using Pri.Ee.Core.Services.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -92,12 +93,23 @@ namespace Pri.Ee.Core.Services
             };
         }
 
-        public async Task<ResultModel<IEnumerable<Goal>>> GetGoalsByUserIdAsync(Guid userId)
+        public async Task<ResultModel<IEnumerable<Goal>>> GetGoalsByUserIdAsync(string userId)
         {
             var goal = await _context.Goals
-            .Include(x => x.UserId)
             .Where(w => w.UserId.Equals(userId)).ToListAsync();
-            return new ResultModel<IEnumerable<Goal>> { Data = goal };
+            if (goal != null)
+            {
+                return new ResultModel<IEnumerable<Goal>> { Data = goal };
+            }
+            return new ResultModel<IEnumerable<Goal>>
+            {
+                Errors = new List<string>
+                {
+                        "There is no goal"
+                }
+            };
+
+           
         }
 
         public async Task<ResultModel<Goal>> UpdateGoalAsync(Goal goal)
@@ -135,5 +147,6 @@ namespace Pri.Ee.Core.Services
                 Data = goal
             };
         }
+    
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using Pri.Ee.Api.Dtos;
@@ -41,7 +42,7 @@ namespace Pri.Ee.Api.Controllers
             var applicationUser = await _userManager.FindByEmailAsync(login.Email);
             JwtSecurityToken token = await GenerateTokenAsync(applicationUser);
             //defined
-            string serializedToken = new JwtSecurityTokenHandler().WriteToken(token); //serialize the token
+            string serializedToken = new JwtSecurityTokenHandler().WriteToken(token); 
             return Ok(new LoginUserResponseDto { Token = serializedToken });
         }
 
@@ -54,6 +55,7 @@ namespace Pri.Ee.Api.Controllers
             {
                 Email = registration.Email,
                 UserName = registration.Email,
+                Name = registration.Name 
             };
             IdentityResult result = await _userManager.CreateAsync(newUser, registration.Password);
             if (!result.Succeeded)
@@ -64,9 +66,14 @@ namespace Pri.Ee.Api.Controllers
                 }
                 return BadRequest(ModelState);
             }
-
+            var roleResult = await _userManager.AddToRoleAsync(newUser, "Customer");
+            if (!roleResult.Succeeded)
+            {
+                return StatusCode(500, "Failed to assign the 'Customer' role to the user.");
+            }
             return Ok();
         }
+     
         private async Task<JwtSecurityToken> GenerateTokenAsync(ApplicationUser user)
         {
             var claims = new List<Claim>();
@@ -81,6 +88,7 @@ namespace Pri.Ee.Api.Controllers
             foreach (var roleClaim in roleClaims)
             {
                 claims.Add(new Claim(ClaimTypes.Role, roleClaim));
+                claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id));
             }
 
             var expirationDays = _configuration.GetValue<int>("JWTConfiguration:TokenExpirationDays");
@@ -98,5 +106,6 @@ namespace Pri.Ee.Api.Controllers
 
             return token;
         }
+
     }
 }

@@ -1,0 +1,43 @@
+﻿@model IEnumerable<GoalResponseDto>
+
+<h2>User Goals</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-info">@TempData["InfoMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Target</th>
+            <th>Progress</th>
+            <th>User ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        <a class="nav-link" asp-area="" asp-controller="Goals" asp-action="Add">Add new Goal</a>
+
+        @foreach (var goal in Model)
+        {
+            if (goal == null)
+            {
+                <div class="alert alert-info">@TempData["No Goals"]</div>
+
+            }
+            <tr>
+                <td>@goal.Id</td>
+                <td>@goal.Target</td>
+                <td>@goal.Progress</td>
+                <td>@goal.UserId</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

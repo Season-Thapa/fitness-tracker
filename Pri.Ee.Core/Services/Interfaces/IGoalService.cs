@@ -12,7 +12,7 @@ namespace Pri.Ee.Core.Services.Interfaces
     {
         Task<ResultModel<Goal>> GetGoalByIdAsync(Guid id);
         Task<ResultModel<IEnumerable<Goal>>> GetAllGoalsAsync();
-        Task<ResultModel<IEnumerable<Goal>>> GetGoalsByUserIdAsync(Guid userId);
+        Task<ResultModel<IEnumerable<Goal>>> GetGoalsByUserIdAsync(string userId);
         Task<ResultModel<Goal>> AddGoalAsync(Goal goal);
         Task<ResultModel<Goal>> UpdateGoalAsync(Goal goal);
         Task<ResultModel<Goal>> DeleteGoalAsync(Goal goal);

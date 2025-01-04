@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pri.Ee.Web.Dtos.Goal;
+using System.Net.Http.Headers;
 
 namespace Pri.Ee.Web.Controllers
 {
+
     public class GoalsController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -15,6 +17,8 @@ namespace Pri.Ee.Web.Controllers
 
         public async Task<IActionResult> Index()
         {
+            await SetBearerToken();
+
             var response = await _httpClient.GetAsync("api/Goals");
             if (!response.IsSuccessStatusCode)
             {
@@ -26,6 +30,37 @@ namespace Pri.Ee.Web.Controllers
             return View(goals);
         }
         [HttpGet]
+        public async Task<IActionResult> UserGoals()
+        {
+            // Retrieve the JWT token from session
+            var token = HttpContext.Session.GetString(Constants.TokenKey);
+            if (string.IsNullOrEmpty(token))
+            {
+                TempData["ErrorMessage"] = "You are not logged in.";
+                return RedirectToAction("Login", "Accounts");
+            }
+
+            // Attach the token to the Authorization header
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+
+            // Call the API to get goals for the logged-in user
+            var response = await _httpClient.GetAsync("api/Goals/user-goals");
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Failed to fetch user goals.";
+                return RedirectToAction("Index", "Home");
+            }
+
+            var goals = await response.Content.ReadFromJsonAsync<IEnumerable<GoalResponseDto>>();
+            if (goals == null || !goals.Any())
+            {
+                TempData["InfoMessage"] = "No goals found.";
+                return View(Enumerable.Empty<GoalResponseDto>()); // Pass an empty list
+            }
+
+            return View(goals);
+        }
+        [HttpGet]
         public IActionResult Add()
         {
             return View();
@@ -34,6 +69,7 @@ namespace Pri.Ee.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(GoalRequestDto goalRequestDto)
         {
+            await SetBearerToken();
             if (!ModelState.IsValid)
             {
                 return View(goalRequestDto);
@@ -112,6 +148,19 @@ namespace Pri.Ee.Web.Controllers
             TempData["SuccessMessage"] = "Goal progress updated successfully.";
             return RedirectToAction("Index");
         }
+        private async Task SetBearerToken()
+        {
+            var token = HttpContext.Session.GetString(Constants.TokenKey);
+            if (string.IsNullOrEmpty(token))
+            {
+                ModelState.AddModelError(string.Empty, "User is not authenticated.");
+              
+            }
 
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+        }
+
+
+        
     }
 }

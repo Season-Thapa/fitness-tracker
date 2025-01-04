@@ -1,13 +1,16 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Pri.Ee.Api.Dtos.Workout;
 using Pri.Ee.Core.Dtos;
 using Pri.Ee.Core.Entities;
 using Pri.Ee.Core.Services.Interfaces;
+using System.Security.Claims;
 
 namespace Pri.Ee.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class WorkoutController : ControllerBase
     {
         private readonly IWorkoutService _workoutService;
@@ -17,6 +20,7 @@ namespace Pri.Ee.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _workoutService.GetAllWorkoutsAsync();
@@ -36,6 +40,7 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(result.Errors);
         }
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Get(Guid id)
         {
             var result = await _workoutService.GetWorkoutByIdAsync(id);
@@ -59,11 +64,20 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(result.Errors);
         }
         [HttpPost]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Add(WorkoutRequestDto workoutRequestDto)
         {
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("User ID not found in claims.");
+            }
+
+            var userId = userIdClaim;
             var workout = new Workout
             {
                 Type = workoutRequestDto.Type,
+                UserId = userId,
             };
             var resultWorkout = await _workoutService.AddWorkoutAsync(workout);
             if (resultWorkout.Success)
@@ -82,6 +96,7 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(resultWorkout.Errors);
         }
         [HttpPut]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(WorkoutRequestDto workoutRequestDto)
         {
             if(await _workoutService.DoesWorkoutIdExistAsync(workoutRequestDto.Id) == false)
@@ -105,6 +120,7 @@ namespace Pri.Ee.Api.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (await _workoutService.DoesWorkoutIdExistAsync(id) == false)

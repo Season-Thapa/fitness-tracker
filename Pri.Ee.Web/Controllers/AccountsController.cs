@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Pri.Ee.Web.Dtos;
+using System.Net.Http.Headers;
+using System.Net.Http;
 
 namespace Pri.Ee.Web.Controllers
 {
@@ -44,9 +46,19 @@ namespace Pri.Ee.Web.Controllers
             }
             // Store JWT token in Session
             HttpContext.Session.SetString(Constants.TokenKey, result.Token);
+            _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue(Constants.TokenKey,result.Token);
 
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Index","Home");
         }
+        public IActionResult TestAuthentication()
+        {
+            if (User.Identity.IsAuthenticated)
+            {
+                return Content("Authenticated");
+            }
+            return Content("Not Authenticated");
+        }
+
         [HttpGet]
         public IActionResult Register()
         {
