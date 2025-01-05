@@ -33,6 +33,7 @@ namespace Pri.Ee.Api.Controllers
                     Target = g.Target,
                     Progress = g.Progress,
 
+
                 });
                 return Ok(goalDtos);
             }
@@ -144,18 +145,29 @@ namespace Pri.Ee.Api.Controllers
 
             goal.Progress += progress;
 
-            if (goal.Progress > goal.Target)
+            if (goal.Progress >= goal.Target)
+            {
+
+                goal.Progress = goal.Target;
+
+            }
+            bool isGoalAchieved = false;
+
+            if (goal.Progress >= goal.Target)
             {
                 goal.Progress = goal.Target;
+                isGoalAchieved = true;
             }
-
             var updateResult = await _goalService.UpdateGoalAsync(goal);
             if (updateResult.Success)
             {
-                return Ok(new
+                return Ok(new UpdateProgressResponseDto
                 {
                     GoalId = goal.Id,
-                    UpdatedProgress = goal.Progress,                    
+                    UpdatedProgress = goal.Progress,
+                    Target = goal.Target,
+                    IsGoalAchieved = isGoalAchieved,
+                    Message = isGoalAchieved ? "Congratulations! You have achieved your goal!" : "Goal progress updated successfully."
                 });
             }
 
@@ -184,7 +196,9 @@ namespace Pri.Ee.Api.Controllers
                 Id = g.Id,
                 UserId = userId,
                 Target = g.Target,
-                Progress = g.Progress
+                Progress = g.Progress,
+                Description = g.Description
+                
             });
 
             return Ok(goalDtos);
