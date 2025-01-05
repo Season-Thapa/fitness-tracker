@@ -23,6 +23,7 @@ public class Program
         //builder.Services.AddScoped<IAuthenticationService, AuthenticationService>();
         builder.Services.AddScoped<IWorkoutService, WorkoutService>();
         builder.Services.AddScoped<IGoalService, GoalService>();
+        builder.Services.AddScoped<IMilestoneService, MilesStoneService>();
         // Identity configuration
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
         {
