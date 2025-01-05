@@ -1,0 +1,55 @@
+﻿@model IEnumerable<GoalResponseDto>
+
+<h2>User Goals</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["InfoMessage"] != null)
+{
+    <div class="alert alert-info">@TempData["InfoMessage"]</div>
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Target</th>
+            <th>Progress</th>
+            <th>User ID</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        <a class="nav-link" asp-area="" asp-controller="Goals" asp-action="Add">Add new Goal</a>
+
+        @foreach (var goal in Model)
+        {
+            if (goal == null)
+            {
+                <div class="alert alert-info">@TempData["No Goals"]</div>
+
+            }
+    <tr>
+        <td>@goal.Id</td>
+        <td>@goal.Target kcal</td>
+        <td>@goal.Progress kcal</td>
+        <td>@goal.UserId</td>
+        <td>
+            <a class="nav-link" asp-area="" asp-controller="Goals" asp-route-id="@goal.Id" asp-action="Update">Edit</a>
+            |
+            <form method="post" action="/Goals/Delete/@goal.Id" style="display:inline;">
+                <button type="submit">Delete</button>
+            </form> |
+            <form method="post" asp-action="UpdateProgress" asp-route-id="@goal.Id">
+                <input type="number" name="progress" value="10" min="1" />
+                <button type="submit">Update Progress</button>
+            </form>
+        </td>
+    </tr>
+        }
+    </tbody>
+</table>
+

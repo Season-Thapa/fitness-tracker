@@ -17,7 +17,8 @@ namespace Pri.Ee.Core.Data
         {
 
         }
-
+        public DbSet<Goal> Goals { get; set; }
+        public DbSet<Workout> Workouts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

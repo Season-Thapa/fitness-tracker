@@ -1,0 +1,25 @@
+﻿@model IEnumerable<GoalDto>
+
+<h2>Goals</h2>
+<a class="nav-link" asp-area="" asp-controller="Goals" asp-action="Add">Add new Goal</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Target</th>
+            <th>Progress</th>
+            <th>UserId</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var goal in Model)
+        {
+            <tr>
+                <td>@goal.Target</td>
+                <td>@goal.Progress</td>
+                 <td>@goal.UserId</td>
+            </tr>
+        }
+    </tbody>
+</table>
+

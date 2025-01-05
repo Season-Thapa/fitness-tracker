@@ -83,7 +83,8 @@ namespace Pri.Ee.Core.Seeding
                 new Goal { Id = Guid.NewGuid(), UserId = customerUser.Id, Description = "Swim 3 kilometers this month", Target = 3, Progress = 1 },
                 new Goal { Id = Guid.NewGuid(), UserId = customerUser.Id, Description = "Lose 2 kg in 2 months", Target = 2, Progress = 1 }
             };
-
+            modelBuilder.Entity<Workout>().HasData(workouts);
+            modelBuilder.Entity<Goal>().HasData(goals);
         }
     }
 }
