@@ -83,8 +83,17 @@ namespace Pri.Ee.Core.Seeding
                 new Goal { Id = Guid.NewGuid(), UserId = customerUser.Id, Description = "Swim 3 kilometers this month", Target = 3, Progress = 1 },
                 new Goal { Id = Guid.NewGuid(), UserId = customerUser.Id, Description = "Lose 2 kg in 2 months", Target = 2, Progress = 1 }
             };
+            var milestones = new List<Milestone>
+            {
+                new Milestone { Id = Guid.NewGuid(), GoalId = goals[0].Id, Description = "Achieve 500 calories burned this week", Target = 500, Progress = 300 },
+                new Milestone { Id = Guid.NewGuid(), GoalId = goals[1].Id, Description = "Run 5 km this month", Target = 5, Progress = 2 },
+                new Milestone { Id = Guid.NewGuid(), GoalId = goals[2].Id, Description = "Complete 2 yoga sessions", Target = 2, Progress = 1 },
+                new Milestone { Id = Guid.NewGuid(), GoalId = goals[3].Id, Description = "Swim 1 kilometer this month", Target = 1, Progress = 0 },
+                new Milestone { Id = Guid.NewGuid(), GoalId = goals[4].Id, Description = "Lose 1 kg in the first month", Target = 1, Progress = 0 }
+            };
             modelBuilder.Entity<Workout>().HasData(workouts);
             modelBuilder.Entity<Goal>().HasData(goals);
+            modelBuilder.Entity<Milestone>().HasData(milestones);
         }
     }
 }
