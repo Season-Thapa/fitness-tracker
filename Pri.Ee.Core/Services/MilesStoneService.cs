@@ -23,7 +23,14 @@ namespace Pri.Ee.Core.Services
         {
             try
             {
-            
+                var goal = await _context.Goals.FindAsync(milestone.GoalId);
+                if (goal == null)
+                {
+                    return new ResultModel<Milestone>
+                    {
+                        Errors = new List<string> { "Goal not found." }
+                    };
+                }
                 await _context.Milestones.AddAsync(milestone);
                 await _context.SaveChangesAsync();
 
