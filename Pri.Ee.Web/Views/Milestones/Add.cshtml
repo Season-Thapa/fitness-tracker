@@ -1,6 +1,17 @@
 ﻿@model MilestoneDto
 
 <h2>Create Milestone</h2>
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
 <form method="post">
     <div class="form-group">
         <label>Description:</label>
@@ -11,6 +22,17 @@
         <label>Target:</label>
         <input asp-for="Target" type="number" class="form-control" />
         <span asp-validation-for="Target" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label>Goal:</label>
+        <select asp-for="GoalId" class="form-control">
+            <option value="">Select Goal</option>
+            @foreach (var goal in ViewBag.Goals)
+            {
+                <option value="@goal.Id">@goal.Description</option>
+            }
+        </select>
+        <span asp-validation-for="GoalId" class="text-danger"></span>
     </div>
     <button type="submit" class="btn btn-primary">Create Milestone</button>
 </form>

@@ -55,9 +55,23 @@ namespace Pri.Ee.Web.Controllers
 
 
         public async Task<IActionResult> Add()
-        {        
+        {
+            await SetBearerToken();
 
-            return View();
+            var response = await _httpClient.GetAsync("api/Goals");
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Failed to load goals.";
+                return RedirectToAction("Index");
+            }
+
+            // Deserialize the list of goals
+            var goals = await response.Content.ReadFromJsonAsync<IEnumerable<GoalDto>>();
+
+            // Pass the goals to the view using ViewBag
+            ViewBag.Goals = goals;
+            var milestoneDto = new MilestoneDto();
+            return View(milestoneDto);
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -81,15 +95,14 @@ namespace Pri.Ee.Web.Controllers
             return View(milestoneDto);
 
         }
-        // GET: /Milestones/Edit/{id}
+        [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
             await SetBearerToken();
             var response = await _httpClient.GetAsync($"api/Milestones/{id}");
             if (!response.IsSuccessStatusCode)
             {
-                TempData["ErrorMessage"] = "Failed to load milestone details for editing.";
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             var milestone = await response.Content.ReadFromJsonAsync<MilestoneDto>();
