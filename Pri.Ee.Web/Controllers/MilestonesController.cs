@@ -95,15 +95,14 @@ namespace Pri.Ee.Web.Controllers
             return View(milestoneDto);
 
         }
-        // GET: /Milestones/Edit/{id}
+        [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
             await SetBearerToken();
             var response = await _httpClient.GetAsync($"api/Milestones/{id}");
             if (!response.IsSuccessStatusCode)
             {
-                TempData["ErrorMessage"] = "Failed to load milestone details for editing.";
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
             var milestone = await response.Content.ReadFromJsonAsync<MilestoneDto>();

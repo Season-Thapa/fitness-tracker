@@ -18,6 +18,7 @@ namespace Pri.Ee.Api.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Get()
         {
             var result = await _milestoneService.GetAllMilestonesAsync();
@@ -30,13 +31,20 @@ namespace Pri.Ee.Api.Controllers
 
         [HttpGet("{id}")]
         [Authorize(Roles = "Admin,Customer")]
-        public async Task<IActionResult> GetMilestoneById(Guid id)
+        public async Task<IActionResult> Get(Guid id)
         {
             var result = await _milestoneService.GetMilestoneByIdAsync(id);
             if (result.Success)
             {
+                var milestoneDto = new MilestoneDto
+                {
+                    Id = result.Data.Id,
+                    Description = result.Data.Description,
+                    Target = result.Data.Target,
+                    GoalId = result.Data.GoalId,
+                };
                
-                return Ok(result.Data);
+                return Ok(milestoneDto);
             }
             return BadRequest(result.Errors);
         }
@@ -70,10 +78,21 @@ namespace Pri.Ee.Api.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(Milestone milestone)
         {
+            var existingMilestoneResult = await _milestoneService.GetMilestoneByIdAsync(milestone.Id);
+            if (existingMilestoneResult.Success == false)
+            {
+                return BadRequest(existingMilestoneResult.Errors);
+
+            }
             var result = await _milestoneService.UpdateMilestoneAsync(milestone);
+            var existingEntity = existingMilestoneResult.Data;
+            existingEntity.GoalId = milestone.GoalId;
+            existingEntity.Target = milestone.Target;
+            existingEntity.Description = milestone.Description;
+           
             if (result.Success)
             {
-                return Ok(result.Data);
+                return Ok($"Goal {existingEntity.Id} updated");
             }
             return BadRequest(result.Errors);
         }
