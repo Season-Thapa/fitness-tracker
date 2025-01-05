@@ -8,5 +8,6 @@ namespace Pri.Ee.Api.Dtos.Goal
         public string? UserId { get; set; }
         public int Target { get; set; }
         public int Progress { get; set; }
+        public string Description { get; set; }
     }
 }

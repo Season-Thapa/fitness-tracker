@@ -79,6 +79,10 @@ namespace Pri.Ee.Api.Controllers
             {
                 Type = workoutRequestDto.Type,
                 UserId = userId,
+                Date = workoutRequestDto.Date,
+                CaloriesBurned = workoutRequestDto.CaloriesBurned,
+                Duration = workoutRequestDto.Duration
+
             };
             var resultWorkout = await _workoutService.AddWorkoutAsync(workout);
             if (resultWorkout.Success)
@@ -121,7 +125,7 @@ namespace Pri.Ee.Api.Controllers
 
         }
         [HttpPut]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Update(WorkoutRequestDto workoutRequestDto)
         {
             if(await _workoutService.DoesWorkoutIdExistAsync(workoutRequestDto.Id) == false)
@@ -135,6 +139,9 @@ namespace Pri.Ee.Api.Controllers
             }
             var existingEntity = selectedWorkout.Data;
             existingEntity.Type = workoutRequestDto.Type;
+            existingEntity.Duration = workoutRequestDto.Duration;
+            existingEntity.CaloriesBurned = workoutRequestDto.CaloriesBurned;
+            existingEntity.Date = workoutRequestDto.Date;
             var result = await _workoutService.UpdateWorkoutAsync(existingEntity);
             if (result.Success)
             {
@@ -144,7 +151,7 @@ namespace Pri.Ee.Api.Controllers
 
         }
         [HttpDelete("{id}")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,Customer")]
         public async Task<IActionResult> Delete(Guid id)
         {
             if (await _workoutService.DoesWorkoutIdExistAsync(id) == false)
@@ -158,6 +165,7 @@ namespace Pri.Ee.Api.Controllers
             }
             var result = await _workoutService.DeleteWorkoutAsync(selectedWorkout.Data);
             return Ok($"Workout {selectedWorkout.Data.Id} deleted");
-        }
+        } 
+
     }
 }

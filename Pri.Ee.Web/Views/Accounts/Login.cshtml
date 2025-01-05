@@ -1,17 +1,21 @@
 ﻿@model LoginUserRequestDto
 
-<h2>Login</h2>
-<form method="post">
-    <div>
-        <label>Email:</label>
-        <input asp-for="Email" />
-        <span asp-validation-for="Email"></span>
-    </div>
-    <div>
-        <label>Password:</label>
-        <input asp-for="Password" type="password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <button type="submit">Login</button>
-</form>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Login</h2>
+    <form method="post">
+        <div class="mb-3">
+            <label for="Email" class="form-label">Email:</label>
+            <input asp-for="Email" class="form-control" id="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label for="Password" class="form-label">Password:</label>
+            <input asp-for="Password" type="password" class="form-control" id="Password" />
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn btn-primary w-100">Login</button>
+    </form>
+</div>
 

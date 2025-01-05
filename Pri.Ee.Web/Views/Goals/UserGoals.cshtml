@@ -2,54 +2,86 @@
 
 <h2>User Goals</h2>
 
+<a class="nav-link" asp-area="" asp-controller="Goals" asp-action="Add">Add new Goal</a>
+
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">
+        @TempData["SuccessMessage"]
+    </div>
+}
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
 }
 
-@if (TempData["InfoMessage"] != null)
+<h3>In Progress Goals</h3>
+@if (ViewBag.InProgressGoals != null && ViewBag.InProgressGoals.Count > 0)
 {
-    <div class="alert alert-info">@TempData["InfoMessage"]</div>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Goal</th>
+                <th>Progress</th>
+                <th>Target</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var goal in ViewBag.InProgressGoals)
+            {
+                <tr>
+                    <td>@goal.Description</td>
+                    <td>@goal.Progress</td>
+                    <td>@goal.Target</td>
+                    <td>
+                        <a class="nav-link" asp-area="" asp-route-id="@goal.Id" asp-controller="Goals" asp-action="Update">Edit</a>
+                        <form asp-action="UpdateProgress" method="post">
+                            <input type="hidden" name="id" value="@goal.Id" />
+                            <input type="number" name="progress" placeholder="Add Progress" min="1" class="form-control" />
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </form>
+
+
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No goals in progress.</p>
 }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Target</th>
-            <th>Progress</th>
-            <th>User ID</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        <a class="nav-link" asp-area="" asp-controller="Goals" asp-action="Add">Add new Goal</a>
-
-        @foreach (var goal in Model)
-        {
-            if (goal == null)
+<h3>Completed Goals</h3>
+@if (ViewBag.CompletedGoals != null && ViewBag.CompletedGoals.Count > 0)
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Goal</th>
+                <th>Progress</th>
+                <th>Target</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var goal in ViewBag.CompletedGoals)
             {
-                <div class="alert alert-info">@TempData["No Goals"]</div>
-
+                <tr>
+                    <td>@goal.Description</td>
+                    <td>@goal.Progress</td>
+                    <td>@goal.Target</td>
+                </tr>
             }
-    <tr>
-        <td>@goal.Id</td>
-        <td>@goal.Target kcal</td>
-        <td>@goal.Progress kcal</td>
-        <td>@goal.UserId</td>
-        <td>
-            <a class="nav-link" asp-area="" asp-controller="Goals" asp-route-id="@goal.Id" asp-action="Update">Edit</a>
-            |
-            <form method="post" action="/Goals/Delete/@goal.Id" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form> |
-            <form method="post" asp-action="UpdateProgress" asp-route-id="@goal.Id">
-                <input type="number" name="progress" value="10" min="1" />
-                <button type="submit">Update Progress</button>
-            </form>
-        </td>
-    </tr>
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No completed goals.</p>
+}
 
