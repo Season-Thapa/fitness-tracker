@@ -1,27 +1,29 @@
 ﻿@model WorkoutRequestDto
 
 <h2>Edit Workout</h2>
-<form method="post">
-    <input type="hidden" asp-for="Id" />
-    <div>
-        <label>Type:</label>
-        <input asp-for="Type" />
-        <span asp-validation-for="Type"></span>
-    </div>
-    <div>
-        <label>Duration (minutes):</label>
-        <input asp-for="Duration" type="number" />
-        <span asp-validation-for="Duration"></span>
-    </div>
-    <div>
-        <label>Calories Burned:</label>
-        <input asp-for="CaloriesBurned" type="number" />
-        <span asp-validation-for="CaloriesBurned"></span>
-    </div>
-    <div>
-        <label>Date:</label>
-        <input asp-for="Date" type="datetime-local" />
-        <span asp-validation-for="Date"></span>
-    </div>
-    <button type="submit">Save Changes</button>
-</form>
+<div class="container mt-4">
+    <form method="post">
+        <div class="mb-3">
+            <label for="Type" class="form-label">Workout Type</label>
+            <input type="text" id="Type" name="Type" class="form-control" placeholder="Enter workout type" value="@Model.Type" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Duration" class="form-label">Duration (mins)</label>
+            <input type="number" id="Duration" name="Duration" class="form-control" placeholder="Enter duration in minutes" value="@Model.Duration" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="CaloriesBurned" class="form-label">Calories Burned</label>
+            <input type="number" id="CaloriesBurned" name="CaloriesBurned" class="form-control" placeholder="Enter calories burned" value="@Model.CaloriesBurned" required />
+        </div>
+
+        <div class="mb-3">
+            <label for="Date" class="form-label">Date</label>
+            <input type="date" id="Date" name="Date" class="form-control" value="@Model.Date.ToString("yyyy-MM-dd")" required />
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Changes</button>
+        <a asp-action="UserWorkouts" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

@@ -53,6 +53,10 @@ namespace Pri.Ee.Web.Controllers
                 TempData["InfoMessage"] = "No goals found.";
                 return View(Enumerable.Empty<GoalResponseDto>()); // Pass an empty list
             }
+            var completedGoals = goals.Where(g => g.Progress >= g.Target).ToList();
+            var inProgressGoals = goals.Where(g => g.Progress < g.Target).ToList();
+            ViewBag.CompletedGoals = completedGoals;
+            ViewBag.InProgressGoals = inProgressGoals;
 
             return View(goals);
         }
@@ -68,7 +72,7 @@ namespace Pri.Ee.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(GoalRequestDto goalRequestDto)
         {
-            if(goalRequestDto.StartDate < DateTime.Now || goalRequestDto.EndDate < goalRequestDto.StartDate)
+            if(goalRequestDto.StartDate < DateTime.Today || goalRequestDto.EndDate < goalRequestDto.StartDate)
             {
                 return View(goalRequestDto);
             }
@@ -137,17 +141,24 @@ namespace Pri.Ee.Web.Controllers
             if (progress <= 0)
             {
                 TempData["ErrorMessage"] = "Progress increment must be greater than 0.";
-                return RedirectToAction("Index");
+                return RedirectToAction("UserGoals");
             }
             var response = await _httpClient.PostAsJsonAsync($"api/Goals/{id}/update-progress", progress);
             if (!response.IsSuccessStatusCode)
             {
                 var error = await response.Content.ReadAsStringAsync();
                 TempData["ErrorMessage"] = $"Failed to update goal progress: {error}";
-                return RedirectToAction("Index");
+                return RedirectToAction("UserGoals");
             }
-
-            TempData["SuccessMessage"] = "Goal progress updated successfully.";
+            var result = await response.Content.ReadFromJsonAsync<UpdateProgressResponseDto>(); 
+            if (result.IsGoalAchieved)
+            {
+                TempData["SuccessMessage"] = result.Message;
+            }
+            else
+            {
+                TempData["SuccessMessage"] = "Goal progress updated successfully.";
+            }
             return RedirectToAction("UserGoals");
         }
         private async Task SetBearerToken()

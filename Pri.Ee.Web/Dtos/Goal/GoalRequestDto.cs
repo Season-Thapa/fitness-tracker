@@ -10,7 +10,7 @@ namespace Pri.Ee.Web.Dtos.Goal
         [DataType(DataType.Date)]
         public DateTime StartDate { get; set; }
         [DataType(DataType.Date)]
-        public DateTime EndDate { get; set; }
+        public DateTime EndDate { get; set; }        
         public string Description { get; set; }
     }
 }

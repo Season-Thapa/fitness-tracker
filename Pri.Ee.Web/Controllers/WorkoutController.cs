@@ -56,11 +56,7 @@ namespace Pri.Ee.Web.Controllers
         }
         [HttpPost]
         public async Task<IActionResult> Add(WorkoutRequestDto workoutRequestDto)
-        {
-            if (workoutRequestDto.Date < DateTime.Now)
-            {
-                return View(workoutRequestDto);
-            }
+        {        
             await SetBearerToken();
             if (!ModelState.IsValid)
             {
@@ -80,6 +76,7 @@ namespace Pri.Ee.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
+            await SetBearerToken();
             var response = await _httpClient.GetAsync($"api/Workout/{id}");
             if (!response.IsSuccessStatusCode)
             {
@@ -93,6 +90,7 @@ namespace Pri.Ee.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(Guid id, WorkoutRequestDto workoutRequestDto)
         {
+            await SetBearerToken();
             if (!ModelState.IsValid)
             {
                 return View(workoutRequestDto);

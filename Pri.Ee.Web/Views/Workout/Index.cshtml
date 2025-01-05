@@ -1,36 +1,33 @@
 ﻿@model IEnumerable<WorkoutDto>
 
-<h2>Workouts</h2>
-<a class="nav-link" asp-area="" asp-controller="Workout" asp-action="Add">Create new Workout</a>
+<div class="container mt-4">
+    <h2 class="mb-4">ClientsWorkouts</h2>
 
-<table>
-    <thead>
-        <tr>
-            <th>Type</th>
-            <th>Duration</th>
-            <th>Calories Burned</th>
-            <th>Date</th>
-            <th>UserId</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var workout in Model)
-        {
-            if (workout != null)
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Type</th>
+                <th>Duration (mins)</th>
+                <th>Calories Burned</th>
+                <th>Date</th>
+                <th>UserId</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var workout in Model)
             {
-                <tr>
-                    <td>@workout.Type</td>
-                    <td>@workout.Duration</td>
-                    <td>@workout.CaloriesBurned</td>
-                    <td>@workout.Date.ToString("yyyy-MM-dd")</td>
-                    <td>@workout.UserId</td>
-                    <td>
-                        <a class="nav-link" asp-area="" asp-route-id="@workout.Id" asp-controller="Workout" asp-action="Update">Edit</a>||    <form method="post" action="/Workout/Delete/@workout.Id" style="display:inline;">
-                            <button type="submit">Delete</button>
-                        </form>
-</tr>
+                if (workout != null)
+                {
+                    <tr>
+                        <td>@workout.Type</td>
+                        <td>@workout.Duration</td>
+                        <td>@workout.CaloriesBurned</td>
+                        <td>@workout.Date.ToString("yyyy-MM-dd")</td>
+                        <td>@workout.UserId</td>
+                 
+                    </tr>
+                }
             }
-        }
-    </tbody>
-</table>
+        </tbody>
+    </table>
+</div>
