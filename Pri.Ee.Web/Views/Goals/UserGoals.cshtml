@@ -38,11 +38,14 @@
                     <td>@goal.Progress</td>
                     <td>@goal.Target</td>
                     <td>
+                        <a class="nav-link" asp-area="" asp-route-id="@goal.Id" asp-controller="Goals" asp-action="Update">Edit</a>
                         <form asp-action="UpdateProgress" method="post">
                             <input type="hidden" name="id" value="@goal.Id" />
                             <input type="number" name="progress" placeholder="Add Progress" min="1" class="form-control" />
                             <button type="submit" class="btn btn-primary">Update</button>
                         </form>
+
+
                     </td>
                 </tr>
             }

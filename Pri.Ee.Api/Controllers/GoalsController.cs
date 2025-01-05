@@ -32,8 +32,7 @@ namespace Pri.Ee.Api.Controllers
                     UserId = g.UserId,
                     Target = g.Target,
                     Progress = g.Progress,
-
-
+                    Description = g.Description
                 });
                 return Ok(goalDtos);
             }
@@ -74,8 +73,7 @@ namespace Pri.Ee.Api.Controllers
                 UserId = userId,
                 StartDate = goalDto.StartDate,
                 EndDate = goalDto.EndDate,
-                Description = goalDto.Description,               
-
+                Description = goalDto.Description,            
 
             };
             var resultGoal = await _goalService.AddGoalAsync(goal);
@@ -107,6 +105,7 @@ namespace Pri.Ee.Api.Controllers
             var exisitngEntity = existingGoalResult.Data;
             exisitngEntity.Id = goalDto.Id;
             exisitngEntity.Target = goalDto.Target;
+            exisitngEntity.Description = goalDto.Description;
             var result = await _goalService.UpdateGoalAsync(exisitngEntity);
             if (result.Success)
             {
