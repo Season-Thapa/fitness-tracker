@@ -48,7 +48,8 @@ namespace Pri.Ee.Api.Controllers
             var mileStone = new Milestone
             {
                 Description = milestoneDto.Description,
-                Target = milestoneDto.Target
+                Target = milestoneDto.Target,
+                GoalId = milestoneDto.GoalId,
 
             };
             var resultMilestone = await _milestoneService.AddMilestoneAsync(mileStone);
@@ -58,6 +59,7 @@ namespace Pri.Ee.Api.Controllers
                 {
                     Id = new Guid(),
                     Target = mileStone.Target,
+                    GoalId= milestoneDto.GoalId,
                 };
                 return CreatedAtAction(nameof(Get), new { id = dto.Id }, dto);
             }
