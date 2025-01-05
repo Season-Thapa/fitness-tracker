@@ -58,10 +58,9 @@ namespace Pri.Ee.Core.Services
             };
         }
 
-        public async Task<ResultModel<IEnumerable<Workout>>> GetWorkoutsByUserIdAsync(Guid userId)
+        public async Task<ResultModel<IEnumerable<Workout>>> GetWorkoutsByUserIdAsync(string userId)
         {
             var workout = await _context.Workouts
-                .Include(x => x.UserId)
                 .Where(w => w.UserId.Equals(userId)).ToListAsync();
             return new ResultModel<IEnumerable<Workout>> { Data = workout };
 

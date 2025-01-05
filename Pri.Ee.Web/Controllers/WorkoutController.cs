@@ -28,18 +28,46 @@ namespace Pri.Ee.Web.Controllers
             return View(workouts);
         }
         [HttpGet]
+        public async Task<IActionResult> UserWorkouts()
+        {
+            await SetBearerToken();
+            var response = await _httpClient.GetAsync("api/Workout/user-workout");
+            if (!response.IsSuccessStatusCode)
+            {
+                TempData["ErrorMessage"] = "Failed to fetch user workouts.";
+                return RedirectToAction("Index", "Home");
+            }
+            var workout = await response.Content.ReadFromJsonAsync<IEnumerable<WorkoutResponseDto>>();
+            if (workout == null || !workout.Any())
+            {
+                TempData["InfoMessage"] = "No workout found.";
+                return View(Enumerable.Empty<WorkoutResponseDto>()); 
+            }
+
+            return View(workout);
+
+        }
+        [HttpGet]
         public IActionResult Add()
         {
-            return View();
+            var workoutRequestDto = new WorkoutRequestDto();
+            workoutRequestDto.Date = DateTime.Now;
+            return View(workoutRequestDto);
         }
         [HttpPost]
         public async Task<IActionResult> Add(WorkoutRequestDto workoutRequestDto)
         {
+            if (workoutRequestDto.Date < DateTime.Now)
+            {
+                return View(workoutRequestDto);
+            }
+            await SetBearerToken();
             if (!ModelState.IsValid)
             {
                 return View(workoutRequestDto);
             }
 
+       
             var response = await _httpClient.PostAsJsonAsync("api/Workout", workoutRequestDto);
             if (!response.IsSuccessStatusCode)
             {
@@ -47,7 +75,7 @@ namespace Pri.Ee.Web.Controllers
                 return View(workoutRequestDto);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("UserWorkouts");
         }
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
@@ -77,7 +105,7 @@ namespace Pri.Ee.Web.Controllers
                 return View(workoutRequestDto);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("UserWorkouts");
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
@@ -89,7 +117,7 @@ namespace Pri.Ee.Web.Controllers
                 ModelState.AddModelError(string.Empty, $"Failed to delete workout with ID {id}.");
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("UserWorkouts");
         }
         private async Task SetBearerToken()
         {

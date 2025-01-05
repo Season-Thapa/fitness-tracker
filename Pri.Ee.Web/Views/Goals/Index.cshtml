@@ -8,7 +8,7 @@
         <tr>
             <th>Target</th>
             <th>Progress</th>
-            <th>Actions</th>
+            <th>UserId</th>
         </tr>
     </thead>
     <tbody>
@@ -17,17 +17,7 @@
             <tr>
                 <td>@goal.Target</td>
                 <td>@goal.Progress</td>
-                <td>
-                    <a class="nav-link" asp-area="" asp-controller="Goals" asp-route-id="@goal.Id" asp-action="Update">Edit</a>
-                    |
-                    <form method="post" action="/Goals/Delete/@goal.Id" style="display:inline;">
-                        <button type="submit">Delete</button>
-                    </form> |
-                    <form method="post" asp-action="UpdateProgress" asp-route-id="@goal.Id">
-                        <input type="number" name="progress" value="10" min="1" />
-                        <button type="submit">Update Progress</button>
-                    </form>
-                </td>
+                 <td>@goal.UserId</td>
             </tr>
         }
     </tbody>

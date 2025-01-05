@@ -10,6 +10,7 @@
             <th>Duration</th>
             <th>Calories Burned</th>
             <th>Date</th>
+            <th>UserId</th>
             <th>Actions</th>
         </tr>
     </thead>
@@ -23,6 +24,7 @@
                     <td>@workout.Duration</td>
                     <td>@workout.CaloriesBurned</td>
                     <td>@workout.Date.ToString("yyyy-MM-dd")</td>
+                    <td>@workout.UserId</td>
                     <td>
                         <a class="nav-link" asp-area="" asp-route-id="@workout.Id" asp-controller="Workout" asp-action="Update">Edit</a>||    <form method="post" action="/Workout/Delete/@workout.Id" style="display:inline;">
                             <button type="submit">Delete</button>

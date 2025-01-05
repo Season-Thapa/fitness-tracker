@@ -87,6 +87,11 @@ namespace Pri.Ee.Web.Controllers
             TempData["SuccessMessage"] = "Registration successful! Please log in.";
             return RedirectToAction("Login");
         }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove("JwtToken"); 
+            return RedirectToAction("Login", "Accounts"); 
+        }
 
     }
 }

@@ -106,6 +106,13 @@ namespace Pri.Ee.Api.Controllers
 
             return token;
         }
-
+        [HttpPost("logout")]
+        [Authorize]
+        public IActionResult Logout()
+        {
+            // The actual logout operation in JWT typically means the client deletes the token.
+            // Optionally, invalidate the token by maintaining a blacklist or setting a token expiration policy.
+            return Ok(new { Message = "Logged out successfully." });
+        }
     }
 }

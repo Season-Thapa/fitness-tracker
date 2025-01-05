@@ -5,7 +5,7 @@ namespace Pri.Ee.Api.Dtos.Workout
     public class WorkoutResponseDto
     {
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
+        public string UserId { get; set; }
 
         [Required]
         public string Type { get; set; }

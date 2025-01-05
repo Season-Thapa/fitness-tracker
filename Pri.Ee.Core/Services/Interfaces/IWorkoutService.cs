@@ -13,7 +13,7 @@ namespace Pri.Ee.Core.Services.Interfaces
     {
         Task<ResultModel<Workout>> GetWorkoutByIdAsync(Guid id);
         Task<ResultModel<IEnumerable<Workout>>> GetAllWorkoutsAsync();
-        Task<ResultModel<IEnumerable<Workout>>> GetWorkoutsByUserIdAsync(Guid userId);
+        Task<ResultModel<IEnumerable<Workout>>> GetWorkoutsByUserIdAsync(string userId);
         Task<ResultModel<Workout>> AddWorkoutAsync(Workout workout);
         Task<ResultModel<Workout>> UpdateWorkoutAsync(Workout workout);
         Task<ResultModel<Workout>> DeleteWorkoutAsync(Workout workout);

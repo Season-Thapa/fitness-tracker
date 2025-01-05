@@ -21,14 +21,27 @@
                     <ul class="navbar-nav flex-grow-1">
                         @if (User.Identity.IsAuthenticated)
                         {
+                            if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Goals" asp-action="Index">Goals</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="Index">Workout</a>
+                                </li>
+                            }
+
+                            if (User.IsInRole("Customer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Goals" asp-action="UserGoals">MyGoals</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="UserWorkouts">MyWorkout</a>
+                                </li>
+                            }
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Workout" asp-action="Index">Workout</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Goals" asp-action="Index">Goals</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Goals" asp-action="UserGoals">UserGoals</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Accounts" asp-action="Logout">Logout</a>
                             </li>
                         }
                         else

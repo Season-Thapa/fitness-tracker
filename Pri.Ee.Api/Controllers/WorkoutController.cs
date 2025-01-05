@@ -4,6 +4,7 @@ using Pri.Ee.Api.Dtos.Workout;
 using Pri.Ee.Core.Dtos;
 using Pri.Ee.Core.Entities;
 using Pri.Ee.Core.Services.Interfaces;
+using Pri.Ee.Core.Services.Models;
 using System.Security.Claims;
 
 namespace Pri.Ee.Api.Controllers
@@ -29,11 +30,11 @@ namespace Pri.Ee.Api.Controllers
                 var workoutDto = result.Data.Select(w => new WorkoutResponseDto
                 {
                     Id = w.Id,
+                    UserId = w.UserId,
                     Type = w.Type,
                     CaloriesBurned = w.CaloriesBurned,
                     Date = w.Date,
-                    Duration = w.Duration,
-
+                    Duration = w.Duration
                 });
                 return Ok(workoutDto);
             }
@@ -85,15 +86,39 @@ namespace Pri.Ee.Api.Controllers
                 var dto = new WorkoutResponseDto
                 {
                     Id = new Guid(),
+                    UserId  = userId,
                     Type = workout.Type,
                     Date = workout.Date,
-                    Duration = workout.Duration,
-                    CaloriesBurned = workout.CaloriesBurned                    
                 };
                 return CreatedAtAction(nameof(Get), new {id = workout.Id}, dto);
 
             }
             return BadRequest(resultWorkout.Errors);
+        }
+        [HttpGet("user-workout")]
+        public async Task<IActionResult> GetWorkoutsByUserId()
+        {
+            var userIdClaim = User.Claims.FirstOrDefault(claim => claim.Type.Equals(ClaimTypes.NameIdentifier))!.Value;
+            if (string.IsNullOrEmpty(userIdClaim))
+            {
+                return Unauthorized("User ID not found in claims.");
+            }
+            var userId = userIdClaim;
+            var userWorkout = await _workoutService.GetWorkoutsByUserIdAsync(userId);
+            if (userWorkout == null || !userWorkout.Success)
+            {
+                return NotFound("No workout found for the user");
+            }
+            var wokoutDtos = userWorkout.Data.Select(w => new WorkoutResponseDto
+            {
+                Id = w.Id,
+                CaloriesBurned = w.CaloriesBurned,
+                Type = w.Type,
+                Date = w.Date,
+                Duration = w.Duration,
+            });
+            return Ok(wokoutDtos);
+
         }
         [HttpPut]
         [Authorize(Roles = "Admin")]
@@ -118,7 +143,6 @@ namespace Pri.Ee.Api.Controllers
             return BadRequest(result.Errors);
 
         }
-
         [HttpDelete("{id}")]
         [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(Guid id)

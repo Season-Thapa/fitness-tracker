@@ -4,7 +4,6 @@ using System.Net.Http.Headers;
 
 namespace Pri.Ee.Web.Controllers
 {
-
     public class GoalsController : Controller
     {
         private readonly HttpClient _httpClient;
@@ -32,7 +31,6 @@ namespace Pri.Ee.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> UserGoals()
         {
-            // Retrieve the JWT token from session
             var token = HttpContext.Session.GetString(Constants.TokenKey);
             if (string.IsNullOrEmpty(token))
             {
@@ -40,10 +38,8 @@ namespace Pri.Ee.Web.Controllers
                 return RedirectToAction("Login", "Accounts");
             }
 
-            // Attach the token to the Authorization header
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
 
-            // Call the API to get goals for the logged-in user
             var response = await _httpClient.GetAsync("api/Goals/user-goals");
             if (!response.IsSuccessStatusCode)
             {
@@ -63,12 +59,19 @@ namespace Pri.Ee.Web.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            return View();
+            var goalRequestDto = new GoalRequestDto();
+            goalRequestDto.StartDate = DateTime.Now;
+            goalRequestDto.EndDate = DateTime.Now.AddDays(1);
+            return View(goalRequestDto);
         }
 
         [HttpPost]
         public async Task<IActionResult> Add(GoalRequestDto goalRequestDto)
         {
+            if(goalRequestDto.StartDate < DateTime.Now || goalRequestDto.EndDate < goalRequestDto.StartDate)
+            {
+                return View(goalRequestDto);
+            }
             await SetBearerToken();
             if (!ModelState.IsValid)
             {
@@ -82,12 +85,13 @@ namespace Pri.Ee.Web.Controllers
                 return View(goalRequestDto);
             }
 
-            return RedirectToAction("Index");
+            return RedirectToAction("UserGoals");
         }
 
         [HttpGet]
         public async Task<IActionResult> Update(Guid id)
         {
+            await SetBearerToken();
             var response = await _httpClient.GetAsync($"api/Goals/{id}");
             if (!response.IsSuccessStatusCode)
             {
@@ -101,42 +105,40 @@ namespace Pri.Ee.Web.Controllers
         [HttpPost]
         public async Task<IActionResult> Update(Guid id, GoalRequestDto goalRequestDto)
         {
+            await SetBearerToken();
             if (!ModelState.IsValid)
             {
                 return View(goalRequestDto);
             }
-
             var response = await _httpClient.PutAsJsonAsync("api/Goals", goalRequestDto);
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, "Failed to update goal.");
                 return View(goalRequestDto);
             }
-
-            return RedirectToAction("Index");
+            return RedirectToAction("UserGoals");
         }
         [HttpPost]
         public async Task<IActionResult> Delete(Guid id)
         {
+            await SetBearerToken();
             var response = await _httpClient.DeleteAsync($"api/Goals/{id}");
             if (!response.IsSuccessStatusCode)
             {
                 ModelState.AddModelError(string.Empty, $"Failed to delete goal with ID {id}.");
             }
-
-            return RedirectToAction("Index");
+            return RedirectToAction("UserGoals");
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateProgress(Guid id, int progress)
         {
+            await SetBearerToken();
             if (progress <= 0)
             {
                 TempData["ErrorMessage"] = "Progress increment must be greater than 0.";
                 return RedirectToAction("Index");
             }
-
-            // Send the progress increment directly to the API
             var response = await _httpClient.PostAsJsonAsync($"api/Goals/{id}/update-progress", progress);
             if (!response.IsSuccessStatusCode)
             {
@@ -146,7 +148,7 @@ namespace Pri.Ee.Web.Controllers
             }
 
             TempData["SuccessMessage"] = "Goal progress updated successfully.";
-            return RedirectToAction("Index");
+            return RedirectToAction("UserGoals");
         }
         private async Task SetBearerToken()
         {
