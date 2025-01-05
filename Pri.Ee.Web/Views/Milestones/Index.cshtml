@@ -1,0 +1,35 @@
+﻿@model IEnumerable<MilestoneDto>
+
+<h2>Milestones</h2>
+
+<a class="nav-link" asp-area=""  asp-controller="Milestones" asp-action="Add">Add New Milestone</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Description</th>
+            <th>Target</th>
+            <th>Progress</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var milestone in Model)
+        {
+            <tr>
+                <td>@milestone.Description</td>
+                <td>@milestone.Target</td>
+                <td>@milestone.Progress</td>
+                <td>
+                    <a class="nav-link" asp-area="" asp-route-id="@milestone.Id" asp-controller="Milestones" asp-action="Details">Details</a>
+                    <a class="nav-link" asp-area="" asp-route-id="@milestone.Id" asp-controller="Milestones" asp-action="Update">Edit</a>
+                    <a class="nav-link" asp-area="" asp-route-id="@milestone.Id" asp-controller="Milestones" asp-action="Delete">Delete</a>
+
+
+
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+

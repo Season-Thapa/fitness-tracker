@@ -52,14 +52,14 @@ namespace Pri.Ee.Core.Migrations
                         new
                         {
                             Id = "00000000-0000-0000-0000-000000000001",
-                            ConcurrencyStamp = "76cfb95d-89d1-4b69-bd03-82e4a91da733",
+                            ConcurrencyStamp = "2dcc0e4d-6939-49ee-a8ba-2a41a2cbc22c",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = "00000000-0000-0000-0000-000000000002",
-                            ConcurrencyStamp = "4ed06383-8fb8-4b57-bff8-e16576a5f628",
+                            ConcurrencyStamp = "c541a4a9-323d-4a46-b4d8-af44f5c8b8ff",
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         });
@@ -255,16 +255,16 @@ namespace Pri.Ee.Core.Migrations
                         {
                             Id = "00000000-0000-0000-0000-000000000001",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "017b77ef-d4bb-4d9e-a527-906ab27b5c49",
+                            ConcurrencyStamp = "72f2f5be-f590-4f5b-a616-141a44bab483",
                             Email = "admin@pri.be",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "admin",
                             NormalizedEmail = "ADMIN@PRI.BE",
                             NormalizedUserName = "ADMIN@PRI.BE",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAyoCwNrAIfrKb5awR0Z6vELr8Li9dvg0ymu7cdLymyXSqnnTnmD5BOnw6yrIQOYQg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOPTgoS+q7e2VURJ3SB70G5qB6+CiY1egItvwWqS88S2kA+0oraNy3u4SwuWqSWwdA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7a0f897c-9788-4426-8397-d11ea00844ed",
+                            SecurityStamp = "296f8476-82e3-40de-afd1-72b023fd9490",
                             TwoFactorEnabled = false,
                             UserName = "admin@pri.be"
                         },
@@ -272,16 +272,16 @@ namespace Pri.Ee.Core.Migrations
                         {
                             Id = "00000000-0000-0000-0000-000000000002",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "96cb51e2-0a1b-4896-affa-bbe56895a03b",
+                            ConcurrencyStamp = "a5ae0b60-b8ee-40b9-a60e-88fb6db62256",
                             Email = "customer@pri.be",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Customer",
                             NormalizedEmail = "Customer@PRI.BE",
                             NormalizedUserName = "CUSTOMER@PRI.BE",
-                            PasswordHash = "AQAAAAIAAYagAAAAENoU5iwuZ9YJWHnZbdWTcEf00AYIZAG6JBzsppPSCZVM4MONYetczKBiGQRVnnCyQw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEO/oAHqvt6sDVe4/5+SdzqYKZREsOzd25RGYHCR8fU0BKfc/uTdVM68mtV1ZkiIBiw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "6f7708bd-d202-4a13-90f5-b5cf737b1743",
+                            SecurityStamp = "32de0a7b-ba50-452f-bd73-a41788a1806e",
                             TwoFactorEnabled = false,
                             UserName = "customer@pri.be"
                         });
@@ -318,7 +318,7 @@ namespace Pri.Ee.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bcd758a4-26db-4e3a-ad95-f275f4a6b3a4"),
+                            Id = new Guid("51ea393a-1b5a-4232-bbfc-c25f1f7fb0b3"),
                             Description = "Burn 1000 calories this week",
                             EndDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Progress = 750,
@@ -328,7 +328,7 @@ namespace Pri.Ee.Core.Migrations
                         },
                         new
                         {
-                            Id = new Guid("0d90faaf-6ada-423d-b65f-dcf937b99c58"),
+                            Id = new Guid("76b5682d-0c96-477e-82be-df2feb39aad7"),
                             Description = "Run 10 km this month",
                             EndDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Progress = 6,
@@ -338,7 +338,7 @@ namespace Pri.Ee.Core.Migrations
                         },
                         new
                         {
-                            Id = new Guid("746203a7-967c-4923-85a5-57b981a9b80e"),
+                            Id = new Guid("1bcc417d-d600-4bfe-8d22-38dfbf5a4d4a"),
                             Description = "Complete 5 yoga sessions",
                             EndDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Progress = 2,
@@ -348,7 +348,7 @@ namespace Pri.Ee.Core.Migrations
                         },
                         new
                         {
-                            Id = new Guid("54962663-d7b6-4e03-9320-1fb0ec8fee53"),
+                            Id = new Guid("440aa18a-aaf0-4641-bd17-3b77c9d5038d"),
                             Description = "Swim 3 kilometers this month",
                             EndDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Progress = 1,
@@ -358,13 +358,80 @@ namespace Pri.Ee.Core.Migrations
                         },
                         new
                         {
-                            Id = new Guid("c97bd82d-fbb3-4ee4-a2f9-6a47480ea223"),
+                            Id = new Guid("6e0f9339-e6ec-4c6b-b5fc-656e1a7e7449"),
                             Description = "Lose 2 kg in 2 months",
                             EndDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Progress = 1,
                             StartDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Target = 2,
                             UserId = "00000000-0000-0000-0000-000000000002"
+                        });
+                });
+
+            modelBuilder.Entity("Pri.Ee.Core.Entities.Milestone", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("GoalId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("Progress")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Target")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("GoalId");
+
+                    b.ToTable("Milestones");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("65595f40-7ef6-4839-995b-1696f55055b9"),
+                            Description = "Achieve 500 calories burned this week",
+                            GoalId = new Guid("51ea393a-1b5a-4232-bbfc-c25f1f7fb0b3"),
+                            Progress = 300,
+                            Target = 500
+                        },
+                        new
+                        {
+                            Id = new Guid("59997f67-9416-4397-bb77-213bf0f0e004"),
+                            Description = "Run 5 km this month",
+                            GoalId = new Guid("76b5682d-0c96-477e-82be-df2feb39aad7"),
+                            Progress = 2,
+                            Target = 5
+                        },
+                        new
+                        {
+                            Id = new Guid("f666bc0b-b41e-4848-a6d2-eb8dacfe34f7"),
+                            Description = "Complete 2 yoga sessions",
+                            GoalId = new Guid("1bcc417d-d600-4bfe-8d22-38dfbf5a4d4a"),
+                            Progress = 1,
+                            Target = 2
+                        },
+                        new
+                        {
+                            Id = new Guid("60366059-e80d-40af-8a9f-95058127527e"),
+                            Description = "Swim 1 kilometer this month",
+                            GoalId = new Guid("440aa18a-aaf0-4641-bd17-3b77c9d5038d"),
+                            Progress = 0,
+                            Target = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("6964e0b2-a344-4132-88dd-cbac0e8ed5b1"),
+                            Description = "Lose 1 kg in the first month",
+                            GoalId = new Guid("6e0f9339-e6ec-4c6b-b5fc-656e1a7e7449"),
+                            Progress = 0,
+                            Target = 1
                         });
                 });
 
@@ -396,90 +463,90 @@ namespace Pri.Ee.Core.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a5c21f8b-a84c-4343-8201-4ca1aa4b08b7"),
+                            Id = new Guid("02a53363-3a92-4ad5-b662-591fe0309114"),
                             CaloriesBurned = 300,
-                            Date = new DateTime(2024, 12, 21, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9403),
+                            Date = new DateTime(2024, 12, 26, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5701),
                             Duration = 30,
                             Type = "Running",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("9907414f-d8d9-4ac6-aefa-685577fd5bf4"),
+                            Id = new Guid("9c9f70bd-1ec2-4a79-9e55-d6b2ac5664bf"),
                             CaloriesBurned = 500,
-                            Date = new DateTime(2024, 12, 22, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9515),
+                            Date = new DateTime(2024, 12, 27, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5805),
                             Duration = 60,
                             Type = "Cycling",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("a0f9eaae-ac82-4770-9d20-06812a1abc7a"),
+                            Id = new Guid("1065ea41-7cfb-44c9-a841-92ccf4554be3"),
                             CaloriesBurned = 400,
-                            Date = new DateTime(2024, 12, 23, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9521),
+                            Date = new DateTime(2024, 12, 28, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5809),
                             Duration = 45,
                             Type = "Swimming",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("1204ade3-a6cf-4088-9263-bbabc2b96195"),
+                            Id = new Guid("cd0e4fde-3851-48fb-af27-3d5d5c927a43"),
                             CaloriesBurned = 100,
-                            Date = new DateTime(2024, 12, 24, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9526),
+                            Date = new DateTime(2024, 12, 29, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5814),
                             Duration = 30,
                             Type = "Yoga",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("6c74a235-8f0d-41ec-b517-dfc617797508"),
+                            Id = new Guid("f04dcac1-031a-4d52-abd9-fc56a3cdb459"),
                             CaloriesBurned = 350,
-                            Date = new DateTime(2024, 12, 25, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9530),
+                            Date = new DateTime(2024, 12, 30, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5817),
                             Duration = 50,
                             Type = "Weightlifting",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("81a941cf-5c26-4174-b81c-627da537c630"),
+                            Id = new Guid("ed7701f5-e3ee-4311-8c68-25a7254c8a32"),
                             CaloriesBurned = 270,
-                            Date = new DateTime(2024, 12, 26, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9556),
+                            Date = new DateTime(2024, 12, 31, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5840),
                             Duration = 25,
                             Type = "Running",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("5a0ff8b4-fd16-4875-86cd-e74e49f6300d"),
+                            Id = new Guid("96622c72-88a6-4ab4-86b7-fe3402d42c07"),
                             CaloriesBurned = 400,
-                            Date = new DateTime(2024, 12, 27, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9562),
+                            Date = new DateTime(2025, 1, 1, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5842),
                             Duration = 40,
                             Type = "Cycling",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("b2e6a753-c4e7-4843-96c0-f8fdf97edb8d"),
+                            Id = new Guid("62b5e7be-ef0f-41c8-bbe4-b2fe961c2752"),
                             CaloriesBurned = 450,
-                            Date = new DateTime(2024, 12, 28, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9567),
+                            Date = new DateTime(2025, 1, 2, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5848),
                             Duration = 50,
                             Type = "Swimming",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("8f3b5d5b-65a3-4ef3-af55-7dd54e7028d6"),
+                            Id = new Guid("d0828d5e-28aa-4314-aa8b-ddf55ce42c9b"),
                             CaloriesBurned = 120,
-                            Date = new DateTime(2024, 12, 29, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9571),
+                            Date = new DateTime(2025, 1, 3, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5852),
                             Duration = 35,
                             Type = "Yoga",
                             UserId = "00000000-0000-0000-0000-000000000002"
                         },
                         new
                         {
-                            Id = new Guid("0034f97f-706a-4497-aad7-1b9979200535"),
+                            Id = new Guid("30d295ef-8d00-44e0-a920-1bd60ee5ee24"),
                             CaloriesBurned = 600,
-                            Date = new DateTime(2024, 12, 30, 14, 10, 59, 694, DateTimeKind.Local).AddTicks(9576),
+                            Date = new DateTime(2025, 1, 4, 20, 31, 51, 285, DateTimeKind.Local).AddTicks(5856),
                             Duration = 90,
                             Type = "Hiking",
                             UserId = "00000000-0000-0000-0000-000000000002"
@@ -535,6 +602,22 @@ namespace Pri.Ee.Core.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("Pri.Ee.Core.Entities.Milestone", b =>
+                {
+                    b.HasOne("Pri.Ee.Core.Entities.Goal", "Goal")
+                        .WithMany("Milestones")
+                        .HasForeignKey("GoalId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Goal");
+                });
+
+            modelBuilder.Entity("Pri.Ee.Core.Entities.Goal", b =>
+                {
+                    b.Navigation("Milestones");
                 });
 #pragma warning restore 612, 618
         }

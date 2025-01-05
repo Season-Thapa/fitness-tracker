@@ -19,10 +19,17 @@ namespace Pri.Ee.Core.Data
         }
         public DbSet<Goal> Goals { get; set; }
         public DbSet<Workout> Workouts { get; set; }
+        public DbSet<Milestone> Milestones { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
             DataSeeder.Seed(modelBuilder);
+            modelBuilder.Entity<Milestone>()
+            .HasOne(m => m.Goal)
+            .WithMany(g => g.Milestones)
+            .HasForeignKey(m => m.GoalId)
+            .OnDelete(DeleteBehavior.Cascade); 
+
         }
     }
 }
