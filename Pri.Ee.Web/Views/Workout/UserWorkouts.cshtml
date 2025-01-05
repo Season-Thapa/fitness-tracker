@@ -1,0 +1,36 @@
+﻿@model IEnumerable<WorkoutResponseDto>
+
+<h2>Workouts</h2>
+<a class="nav-link" asp-area="" asp-controller="Workout" asp-action="Add">Create new Workout</a>
+
+<table>
+    <thead>
+        <tr>
+            <th>Type</th>
+            <th>Duration</th>
+            <th>Calories Burned</th>
+            <th>Date</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var workout in Model)
+        {
+            if (workout != null)
+            {
+                <tr>
+                    <td>@workout.Type</td>
+                    <td>@workout.Duration</td>
+                    <td>@workout.CaloriesBurned</td>
+                    <td>@workout.Date.ToString("yyyy-MM-dd")</td>
+                    <td>
+                        <a class="nav-link" asp-area="" asp-route-id="@workout.Id" asp-controller="Workout" asp-action="Update">Edit</a>||  
+                        <form method="post" action="/Workout/Delete/@workout.Id" style="display:inline;">
+                            <button type="submit">Delete</button>
+                        </form>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
